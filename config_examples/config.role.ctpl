@@ -1,0 +1,11 @@
+(function () {
+  return {
+    port: 8125,
+    backends: ['./backends/console', '/usr/local/lib/node_modules/aws-cloudwatch-statsd-backend/lib/aws-cloudwatch-statsd-backend'],
+    debug: true,
+    cloudwatch: {
+      iamRole: '{{key "config/statsd/aws-cw/iamRole"}}',
+      region: '{{key "config/statsd/aws-cw/region"}}'
+    }
+  }
+})()

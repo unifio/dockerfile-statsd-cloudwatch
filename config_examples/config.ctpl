@@ -1,0 +1,12 @@
+(function () {
+  return {
+    port: 8125,
+    backends: ['./backends/console', '/usr/local/lib/node_modules/aws-cloudwatch-statsd-backend/lib/aws-cloudwatch-statsd-backend'],
+    debug: true,
+    cloudwatch: {
+      accessKeyId: '{{key "config/statsd/aws-cw/accessKeyId"}}',
+      secretAccessKey: '{{key "config/statsd/aws-cw/secretAccessKey"}}',
+      region: '{{key "config/statsd/aws-cw/region"}}'
+    }
+  }
+})()

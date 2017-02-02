@@ -1,0 +1,29 @@
+machine:
+  environment:
+    STATSD_VERSION: 0.8.0.1
+    DOCKER_IMAGE: 'unifio/statsd-cloudwatch'
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  override:
+    - docker info
+    - if [[ -e ~/docker/image.tar ]]; then docker load --input ~/docker/image.tar; fi
+    - docker build --rm=false -t ${DOCKER_IMAGE} .
+    - mkdir -p ~/docker
+    - docker save ${DOCKER_IMAGE} > ~/docker/image.tar
+
+test:
+  override:
+    - docker run ${DOCKER_IMAGE} node --version
+    - docker run ${DOCKER_IMAGE} npm ls -g aws-sdk
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag -f `docker images | grep -E "${DOCKER_IMAGE}" | awk '{print $3}'` ${DOCKER_IMAGE}:${STATSD_VERSION}
+      - docker push ${DOCKER_IMAGE}
