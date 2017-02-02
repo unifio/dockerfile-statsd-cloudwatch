@@ -29,5 +29,10 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community/" >> /etc/apk/reposi
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/*
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# Expose the statsd udp and management port
+# UDP 
+EXPOSE 8125
+# TCP
+EXPOSE 8126
 
 CMD [ "entrypoint.sh" ]
